@@ -49,10 +49,11 @@ it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a
 
 last iz TO calculate nuMber OF Whitespace characteRS in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
 
-fix_iz_str = fix_mistakes(str_txt)
-sent_list = create_sentence_list(fix_iz_str)
-fix_case_str = fix_capitalization(sent_list)
-lst_sent = create_last_sentence(fix_case_str)
-final_str = '. '.join(fix_case_str) + ' '.join(lst_sent).capitalize() + '.'
-print(final_str)
-calculation_of_spaces(str_txt)
+if __name__ == '__main__':
+    fix_iz_str = fix_mistakes(str_txt)
+    sent_list = create_sentence_list(fix_iz_str)
+    fix_case_str = fix_capitalization(sent_list)
+    lst_sent = create_last_sentence(fix_case_str)
+    final_str = '. '.join(fix_case_str) + ' '.join(lst_sent).capitalize() + '.'
+    print(final_str)
+    calculation_of_spaces(str_txt)
