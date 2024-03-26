@@ -77,6 +77,35 @@ class InputFromTextFile:
             sentences = re.split(r'(?<=[.!?])', line)
             fixed_lines = fix_capitalization(sentences)
             publication.extend(fixed_lines)
+        publication.append('-' * 20)
+        publication.extend([''] * 4)
+        return publication
+
+
+class InputFromJson:
+    """Class for parsing a publications from a JSON file"""
+    def __init__(self, json_file_path):
+        self.json_file_path = json_file_path
+
+    def get_publication_from_json_file(self):
+        with open(self.json_file_path, 'r') as jsonfile:
+            json_str = json.load(jsonfile)
+
+        publication = []
+        for publ_type, publ_items in json_str.items():
+            publication.append(publ_type)
+            for items in publ_items:
+                publication.append(items['text'])
+                if 'country' in items:
+                    items['date'] = str(datetime.now())
+                    publication.append(f"{items['country']}, {items['date']}")
+                elif 'date' in items:
+                    date_exp = datetime.strptime(items['date'], "%Y-%m-%d").date()
+                    days_left = (date_exp - date.today()).days
+                    items['days_left'] = str(days_left) + ' days left'
+                    publication.append(f"Actual until: {items['date']}, {items['days_left']}")
+                publication.append('-' * 20)
+                publication.extend([''] * 4)
         return publication
 
 
@@ -88,8 +117,8 @@ class PublishToFile:
             for line in publ_type:
                 f.write(line)
                 f.write('\n')
-            f.write('-'*20)
-            f.write('\n'*4)
+            # f.write('-'*20)
+            # f.write('\n'*4)
 
 
 # function to check if the particular text in the output file
@@ -115,6 +144,7 @@ def get_the_file_to_parse(folder_path):
 
 output_file_path = "newsfeed.txt"
 input_file_path = get_the_file_to_parse('TxtNews')
+input_json_path = get_the_file_to_parse('JsonNews')
 
 
 type_of_publication = UserInterface()
@@ -153,6 +183,18 @@ elif type_of_publication.input_type == '2':
         if is_text_in_file(output_file_path, news_from_file_to_publish[1]):
             print(f"The file was successfully processed")
             os.remove(input_file_path)
+        else:
+            print(f"Publications from the file weren't processed.")
+    else:
+        print(input_file_path)
+elif type_of_publication.input_type == '3':
+    if input_json_path != 'There are more than 1 file in the folder.' and input_json_path != 'No file to process.':
+        news_from_json_file = InputFromJson(input_json_path)
+        news_from_json_to_publish = news_from_json_file.get_publication_from_json_file()
+        publish = PublishToFile(news_from_json_to_publish)
+        if is_text_in_file(output_file_path, news_from_json_to_publish[1]):
+            print(f"The file was successfully processed")
+            os.remove(input_json_path)
         else:
             print(f"Publications from the file weren't processed.")
     else:

@@ -1,0 +1,22 @@
+{
+  "News": [
+    {
+      "text": "News 1",
+      "country": "Canada"
+    },
+    {
+      "text": "News 2",
+      "country": "Belarus"
+    }
+  ],
+  "Private Ad": [
+    {
+      "text": "Privet Ad 1",
+      "date": "2024-04-03"
+    },
+    {
+      "text": "Privet Ad 2",
+      "date": "2024-04-05"
+    }
+  ]
+}
